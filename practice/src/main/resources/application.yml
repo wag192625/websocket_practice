@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: practice
+
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update     # 개발 중에는 update, 운영은 validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+
+server:
+  port: 8080
