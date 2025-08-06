@@ -60,7 +60,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    // 아래는 스프링 시큐리티가 요구하는 코드 (일단 true로 놔둠)
+    // 아래는 스프링 시큐리티가 요구하는 코드 (기획된 사항이 없으면 일단 true로)
     @Override
     public boolean isAccountNonExpired() {
         return true;
