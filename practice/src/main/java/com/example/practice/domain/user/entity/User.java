@@ -30,6 +30,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
+    // username을 이메일로 쓸 것.
     @Column(nullable = false, unique = true)
     private String username;
 
