@@ -1,7 +1,9 @@
 package com.example.practice.global.auth.controller;
 
+import com.example.practice.global.auth.dto.request.LoginRequestDto;
 import com.example.practice.global.auth.dto.request.SignupRequestDto;
 import com.example.practice.global.auth.dto.response.SignupResponseDto;
+import com.example.practice.global.auth.dto.response.TokenResponseDto;
 import com.example.practice.global.auth.service.AuthService;
 import com.example.practice.global.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -27,5 +29,11 @@ public class AuthContoller {
             .body(ApiResponse.ok(
                 authService.signup(requestDto)
             ));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<TokenResponseDto>> login(
+        @Valid @RequestBody LoginRequestDto requestDto) {
+        return ResponseEntity.ok(ApiResponse.ok(authService.login(requestDto)));
     }
 }

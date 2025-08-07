@@ -2,9 +2,16 @@ package com.example.practice.global.auth.service;
 
 import com.example.practice.domain.user.entity.User;
 import com.example.practice.domain.user.repository.UserRepository;
+import com.example.practice.global.auth.dto.request.LoginRequestDto;
 import com.example.practice.global.auth.dto.request.SignupRequestDto;
 import com.example.practice.global.auth.dto.response.SignupResponseDto;
+import com.example.practice.global.auth.dto.response.TokenResponseDto;
+import com.example.practice.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,5 +38,20 @@ public class AuthService {
         User user = requestDto.toEntity(encodedPassword);
         // user data를 DB에 저장 후 responseDto에 매칭되는 데이터 변환
         return SignupResponseDto.from(userRepository.save(user));
+    }
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public TokenResponseDto login(LoginRequestDto requestDto) {
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                requestDto.getUsername(),
+                requestDto.getPassword()
+            )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtTokenProvider.createToken(authentication);
+        return new TokenResponseDto(jwt);
     }
 }
