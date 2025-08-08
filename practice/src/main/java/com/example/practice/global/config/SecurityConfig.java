@@ -1,5 +1,7 @@
 package com.example.practice.global.config;
 
+import com.example.practice.global.security.handler.CustomAccessDeniedHandler;
+import com.example.practice.global.security.handler.JwtAuthenticationEntryPoint;
 import com.example.practice.global.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig{
 
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     // 비밀번호 암호화
@@ -39,7 +43,11 @@ public class SecurityConfig{
                 .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(exception -> exception
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            );;
 
         return http.build();
     }
