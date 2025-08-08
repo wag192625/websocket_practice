@@ -22,6 +22,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public SignupResponseDto signup(SignupRequestDto requestDto) {
@@ -40,8 +42,6 @@ public class AuthService {
         return SignupResponseDto.from(userRepository.save(user));
     }
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
 
     public TokenResponseDto login(LoginRequestDto requestDto) {
         Authentication authentication = authenticationManager.authenticate(
