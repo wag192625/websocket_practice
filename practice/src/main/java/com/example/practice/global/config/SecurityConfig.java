@@ -41,6 +41,7 @@ public class SecurityConfig{
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/create-post").permitAll() // 게시글 테스트용
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
